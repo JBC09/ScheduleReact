@@ -1,11 +1,36 @@
-import React from "react";
+import React, {useRef} from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {useGlobal} from "../GlobalContext.tsx";
 
 const LoginVIew: React.FC = () => {
+    const userIdRef = useRef<HTMLInputElement>(null);
+    const userPwRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+    const {setGlobalUserName} = useGlobal();
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        fetch("http://localhost:8080/user/login", {
+            headers:{"Content-Type": "application/json"},
+            method: "POST",
+            body: JSON.stringify({
+                userId: userIdRef.current?.value,
+                userPw: userPwRef.current?.value
+            })
+        })
+            .then(res => res.json())
+            .then((data) => {
+                toast(data.message);
+
+                if(data.token !== "") {
+                    setGlobalUserName(data.token);
+                    localStorage.setItem("token", data.token);
+                    navigate("/");
+                }
+            })
+
         e.preventDefault();
-        console.log("로그인 시도");
     };
 
 
@@ -20,7 +45,7 @@ const LoginVIew: React.FC = () => {
                     <Card className="shadow-lg border-0 p-5 rounded-4">
                         <Card.Body>
                             {/* 🔹 타이포 크기 및 간격 확대 */}
-                            <h2 className="text-center mb-4 fw-bold">로그인</h2>
+                            <h2 className="text-center mb-4 fw-bold">Grass Login</h2>
                             <p className="text-center text-muted mb-4">
                                 포털에 접속하려면 로그인해주세요.
                             </p>
@@ -29,6 +54,7 @@ const LoginVIew: React.FC = () => {
                                 <Form.Group controlId="formEmail" className="mb-4">
                                     <Form.Label className="fw-semibold">이메일</Form.Label>
                                     <Form.Control
+                                        ref={userIdRef}
                                         type="email"
                                         placeholder="example@email.com"
                                         size="sm" /* 🔹 input 크기 확대 */
@@ -39,6 +65,7 @@ const LoginVIew: React.FC = () => {
                                 <Form.Group controlId="formPassword" className="mb-4">
                                     <Form.Label className="fw-semibold">비밀번호</Form.Label>
                                     <Form.Control
+                                        ref={userPwRef}
                                         type="password"
                                         placeholder="비밀번호를 입력하세요"
                                         size="sm"
@@ -47,7 +74,7 @@ const LoginVIew: React.FC = () => {
                                 </Form.Group>
 
                                 <Button
-                                    variant="primary"
+                                    variant="dark"
                                     type="submit"
                                     size="sm" /* 🔹 버튼 크기 확대 */
                                     className="w-100 mt-2 fw-semibold"
@@ -57,7 +84,7 @@ const LoginVIew: React.FC = () => {
 
                                 <div className="text-center mt-4">
                                     <Link  to="/signup"
-                                           className="text-decoration-none fw-medium text-primary">
+                                           className="text-decoration-none fw-medium text-dark">
                                         계정이 없으신가요? 회원가입
                                     </Link>
                                 </div>

@@ -107,3 +107,83 @@
 .read-the-docs {
   color: #888;
 }
+
+.mainSectionTitle {
+    text-Align: left;
+    font-weight: bold;
+    color: #131313;
+    margin-bottom: 1rem;
+}
+
+/*//*/
+
+
+/*잔디 디자인*/
+.day-box {
+    --i: 0;
+    --j: 100;
+    width: 0.8rem;
+    height: 0.8rem;
+    opacity: 0;
+    transform: scale(0.3) translateY(calc(var(--j) * 1px));
+    animation: fadeIn 0.5s forwards;
+    animation-delay: calc(var(--i) * 0.01s); /* 인덱스별로 순차 애니메이션 */
+    transition: transform 0.35s ease, background-color 0.2s ease, filter 0.35s ease;
+    box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.6),  /* 아래로 떨어지는 깊은 그림자 */
+            0 0 10px rgba(255, 255, 255, 1); /* 미세한 빛 반사 */
+}
+
+.day-box.red {
+    background-color: #e75c5c; /* 부드럽고 톤 다운된 레드 */
+}
+
+.day-box.blue {
+    background-color: #4d82e9; /* 약간 퍼플기가 있는 모던 블루 */
+}
+
+.day-box.gray {
+    background-color: #5f6368; /* 깔끔한 중간톤 그레이 */
+}
+
+
+/*잔디 페이드인*/
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        border-radius: 3px;
+        border: 1px solid gray;
+        transform: scale(1) translateY(0px);
+        box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0),  /* 아래로 떨어지는 깊은 그림자 */
+                0 0 10px rgba(255, 255, 255, 0); /* 미세한 빛 반사 */
+    }
+}
+
+/*잔디 Wrap 디자인*/
+.wrap-day-box-container {
+    width: 100%;
+    opacity: 1;
+    animation: widthFull 3.7s forwards linear;
+    padding: 2rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
+    background-color: #222;
+    align-items: start;
+    box-sizing: border-box;
+    border-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* Hover 시 반응 */
+.day-box:hover {
+    filter: brightness(1.3);
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transform: scale(1.2) !important;
+    z-index: 1000000;
+}
+
+
